@@ -1,45 +1,59 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/LoginPage.css"; // Import CSS for styling
+import { useState } from "react";
 
-const LoginPage = () => {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (email === "admin@example.com" && password === "password") {
-      navigate("/dashboard"); // Redirect after successful login
-    } else {
-      setError("Invalid credentials. Try again!");
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      console.log("Email:", email);
+      console.log("Password:", password);
+      setLoading(false);
+    }, 2000);
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Login to QPGS</h2>
-        {error && <p className="error">{error}</p>}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={handleLogin}>Login</button>
-        <p>
-          Don't have an account? <a href="/register">Sign Up</a>
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-md">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-gray-700 font-medium mb-2 text-left">UserName</label>
+            <input
+              type="email"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Password</label>
+            <input
+              type="password"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+        <p className="text-center text-sm text-gray-600 mt-4">
+          Don't have an account? <a href="#" className="text-blue-500 hover:underline">Sign up</a>
         </p>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}
